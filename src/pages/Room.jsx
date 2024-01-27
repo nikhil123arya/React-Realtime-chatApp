@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { ID, Query } from "appwrite";
+import { Trash2 } from "react-feather";
 import {
   databases,
   DATABASE_ID,
@@ -49,6 +50,11 @@ const Room = () => {
     setMessages(response.documents);
   };
 
+  const deleteMessage= async(message_id) => {
+    databases.deleteDocument(DATABASE_ID, COLLECTION_ID_MESSAGES, message_id);
+    setMessages(prevState => messages.filter(message => message.$id !== message_id))
+  }
+
   return (
     <main className="container">
       <div className="room--container">
@@ -58,13 +64,15 @@ const Room = () => {
               required
               maxLength={1000}
               placeholder="Say Something....."
-              onChange={(e)=> {setMessageBody(e.target.value)}}
+              onChange={(e) => {
+                setMessageBody(e.target.value);
+              }}
               value={messageBody}
             ></textarea>
           </div>
 
           <div className="send-btn--wrapper">
-            <input className="btn btn--secondary" type="submit" value="send"/>
+            <input className="btn btn--secondary" type="submit" value="send" />
           </div>
         </form>
 
@@ -73,11 +81,19 @@ const Room = () => {
             <div key={message.$id} className="message--wrapper">
               <div className="message--header">
                 <small className="message-timestamp">
-                  {message.$createdAt}
+                  {new Date(message.$createdAt).toLocaleString()}
                 </small>
+
+                <Trash2
+                  className="delete--btn"
+                  onClick={() => {
+                    deleteMessage(message.$id);
+                  }}
+                />
+
               </div>
               <div className="message--body">
-                <span >{message.body}</span>
+                <span>{message.body}</span>
               </div>
             </div>
           ))}
