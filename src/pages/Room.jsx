@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { ID, Query } from "appwrite";
 import { Trash2 } from "react-feather";
+import client from "../appwriteConfig";
 import {
   databases,
   DATABASE_ID,
@@ -14,6 +15,27 @@ const Room = () => {
   //It utilizes the useEffect hook to perform side effects in function components.
   useEffect(() => {
     getMessages();
+
+    const unsubscribe = client.subscribe(`databases.${DATABASE_ID}.collections.${COLLECTION_ID_MESSAGES}.documents`, (response) => {
+      // Callback will be executed on changes for documents A and all files.
+      // console.log('REAL TIME:',response);
+
+      if(response.events.includes("databases.*.collections.*.documents.*.create")) {
+        console.log("a message was created");
+        setMessages(prevState => [response.payload, ...prevState])
+      }
+
+      if(response.events.includes("databases.*.collections.*.documents.*.delete")) {
+        console.log("a message was deleted!!!!");
+        setMessages((prevState) => prevState.filter((message) => message.$id !== response.payload.$id));
+      }
+
+    });
+
+    return () => {
+      unsubscribe();
+    }
+
   }, []);
 
   const handleSubmit = async(e) => {
@@ -31,7 +53,7 @@ const Room = () => {
     )
     console.log('Created!', response);
 
-    setMessages(prevState=> [response, ...messages])
+    // setMessages(prevState=> [response, ...prevState])
 
     setMessageBody('');
   }
@@ -52,7 +74,7 @@ const Room = () => {
 
   const deleteMessage= async(message_id) => {
     databases.deleteDocument(DATABASE_ID, COLLECTION_ID_MESSAGES, message_id);
-    setMessages(prevState => messages.filter(message => message.$id !== message_id))
+    // setMessages(prevState => messages.filter(message => message.$id !== message_id))
   }
 
   return (
@@ -81,7 +103,13 @@ const Room = () => {
             <div key={message.$id} className="message--wrapper">
               <div className="message--header">
                 <small className="message-timestamp">
-                  {new Date(message.$createdAt).toLocaleString()}
+                  {new Date(message.$createdAt).toLocaleString([], {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
                 </small>
 
                 <Trash2
@@ -90,7 +118,6 @@ const Room = () => {
                     deleteMessage(message.$id);
                   }}
                 />
-
               </div>
               <div className="message--body">
                 <span>{message.body}</span>
