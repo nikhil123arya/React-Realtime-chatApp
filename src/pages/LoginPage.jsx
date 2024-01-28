@@ -25,13 +25,15 @@ const LoginPage = () => {
   return (
     <div className="auth--container">
       <div className="form--wrapper">
-        <form onSubmit={(e) => {
+        <form
+          onSubmit={(e) => {
             handleUserLogin(e, credentials);
           }}
         >
           <div className="field--wrapper">
             <lable>Email:</lable>
             <input
+              id="input--style"
               type="email"
               required
               name="email"
@@ -43,6 +45,7 @@ const LoginPage = () => {
           <div className="field--wrapper">
             <lable>Password:</lable>
             <input
+              id="input--style"
               type="password"
               required
               name="password"

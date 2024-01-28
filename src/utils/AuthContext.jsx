@@ -17,12 +17,13 @@ export const AuthProvider = ({children}) => {
 
   const getUserOnLoad = async () => {
     try {
-      const accountDetails = account.get();
+      const accountDetails = await account.get();
+      console.log('ACCOUNT DETAILS', accountDetails);
       setUser(accountDetails);
     }catch(error) {
       console.error(error);
     }
-    setLoading(false)
+    setLoading(false);
   }
 
   const handleUserLogin = async (e, credentials) => {
@@ -31,7 +32,7 @@ export const AuthProvider = ({children}) => {
      try {
       const response = await account.createEmailSession(credentials.email, credentials.password);
       console.log('LOGGED-IN', response);
-      const accountDetails = account.get();
+      const accountDetails = await account.get();
       setUser(accountDetails);
 
       navigate('/')
@@ -39,11 +40,18 @@ export const AuthProvider = ({children}) => {
         console.error(error);
      }
    };
-
+ 
+  
+  const handleUserLogout = async () => {
+    await account.deleteSession('current');
+    setUser(null);
+  }
+   
   //This object holds the authentication-related data that will be provided by the context.
   const contextData = {
     user,
     handleUserLogin,
+    handleUserLogout
   };
 
   return (

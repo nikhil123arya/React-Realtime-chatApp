@@ -189,6 +189,8 @@ input[type="text"], input[type="password"], input[type="email"], textarea{
   color:red;
 }
 
-
+#input--style {
+  background-color: rgb(36, 36, 49);
+}
 
 
