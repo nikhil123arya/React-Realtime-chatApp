@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../utils/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const { user, handleUserLogin } = useAuth();
   const navigate = useNavigate();
 
-  const [credentials, setCredentials] = useState({ email: "", password: "" });
+  const [credentials, setCredentials] = useState({
+      email: "",
+      password: "" 
+  });
 
   useEffect(() => {
     if (user) {
@@ -63,6 +66,8 @@ const LoginPage = () => {
             />
           </div>
         </form>
+
+        <p>Dont have an account? Register <Link to="/register">here</Link></p>
       </div>
     </div>
   );
