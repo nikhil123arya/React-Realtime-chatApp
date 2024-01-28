@@ -1,4 +1,4 @@
-import { Client, Databases} from 'appwrite';
+import { Client, Databases, Account} from 'appwrite';
 
 export const PROJECT_ID = '65b3f9acb2dd858313a8'
 export const DATABASE_ID = '65b3fd34dbfb7c55911b'
@@ -11,5 +11,6 @@ client
   .setProject('65b3f9acb2dd858313a8');
 
 export const databases = new Databases(client);
+export const account = new Account(client);
 
 export default client;
