@@ -1,6 +1,15 @@
-# React + Vite
+# RealTime Chat App with React + vite and appwrite cloud.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Creating a real-time chat application using React for the frontend and Appwrite as the backend solution. Appwrite offers a comprehensive set of APIs for backend functionalities like user authentication, database management, and real-time communication, enabling developers to build robust applications quickly and efficiently.
+> link.
+
+<img src="images/demo.png"/>
+
+### Getting Started
+
+$ npm install
+$ npm run dev
+```
 
 Currently, two official plugins are available:
 
